@@ -1,0 +1,22 @@
+POST http://localhost:3000/login/
+Content-Type: application/json
+
+{
+    "username":"abhi",
+    "password":"abhi@2324"
+}
+
+###
+GET http://localhost:3000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiaGkiLCJpYXQiOjE2MzA3NjQzODJ9.2Ifd72u6tuIOhauyxiKZ8qv9ojOq7kf1qHBvW3V8ccA
+
+
+### 
+POST http://localhost:3000/rental/1/ 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiaGkiLCJpYXQiOjE2MzA3NjQzODJ9.2Ifd72u6tuIOhauyxiKZ8qv9ojOq7kf1qHBvW3V8ccA
+
+{
+    "hours":2,
+     "useraddress":"hyderabad", 
+     "rentprice":1000
+}
