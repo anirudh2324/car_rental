@@ -131,18 +131,31 @@ app.post("/rental/:carId/", authenticateToken, async (request, response) => {
     const { hours, useraddress, rentprice } = request.body;
     let price = hours * rentprice;
     console.log(price);
-    const postRentalCars = `INSERT INTO rentalHours(hours,useraddress,rentprice)
-    VALUES(${hours},'${useraddress}',${price})`;
+    const postRentalCars = `INSERT INTO rentalHours(hours,useraddress,rentprice,userId,carId)
+    VALUES(${hours},'${useraddress}',${price},${userDetails.userId},${carIds.carId})`;
     await db.run(postRentalCars);
     response.send("post successfully");
   }
 });
 
 //Feedback api
-app.post("/feedback/", authenticateToken, async (request, response) => {
+app.post("/feedback/:carId/", authenticateToken, async (request, response) => {
+  const { carId } = request.params;
   const { feedback } = request.body;
-  const postFeedback = `INSERT INTO feedback(feedback)VALUES('${feedback}')`;
-  await db.run(postFeedback);
+  let { username } = request;
+  const getSelectedCars = `SELECT * FROM cars where carId=${carId}`;
+  const carIds = await db.get(getSelectedCars);
+  const getUserDetails = `SELECT * FROM user WHERE username = '${username}'`;
+  const userDetails = await db.get(getUserDetails);
+  if (carIds === undefined) {
+    response.status(400);
+    response.send("Invalid carId");
+  } else {
+    const postFeedback = `INSERT INTO feedback(feedback,userId,carId)VALUES('${feedback}',${userDetails.userId},${carIds.carId})`;
+    await db.run(postFeedback);
 
-  response.send("Feedback Successfully");
+    response.send("Feedback Successfully");
+  }
 });
+
+module.exports = app;
