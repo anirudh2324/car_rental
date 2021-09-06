@@ -129,10 +129,20 @@ app.post("/rental/:carId/", authenticateToken, async (request, response) => {
     response.send("Invalid carsId");
   } else {
     const { hours, useraddress, rentprice } = request.body;
-    console.log(hours);
+    let price = hours * rentprice;
+    console.log(price);
     const postRentalCars = `INSERT INTO rentalHours(hours,useraddress,rentprice)
-    VALUES(${hours},'${useraddress}',${rentprice})`;
+    VALUES(${hours},'${useraddress}',${price})`;
     await db.run(postRentalCars);
     response.send("post successfully");
   }
+});
+
+//Feedback api
+app.post("/feedback/", authenticateToken, async (request, response) => {
+  const { feedback } = request.body;
+  const postFeedback = `INSERT INTO feedback(feedback)VALUES('${feedback}')`;
+  await db.run(postFeedback);
+
+  response.send("Feedback Successfully");
 });
